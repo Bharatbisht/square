@@ -139,31 +139,28 @@ class Upload_file {
   
 
       global $wpdb;
-      $table_name = $wpdb->prefix . 'sandbox';
+      $table_name = $wpdb->prefix . 'Aerial_upload_images';
       
       //query
       
-      $sql = "INSERT INTO images (image, image_text) VALUES ('$image', '$image_text')";
+      $sql = "INSERT INTO $table_name ('IMAGE_DIR', 'USER_ID','DATE') VALUES ('$filename', 'hunterd270b@gmail.com', Date())";
 
               require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
                  dbDelta( $sql );
 
                  //mail sent
-
+/*
                  $to = ‘hunter@d270b@gmail.com’;
                  $subject = ‘blueprint’;
                  $message = ‘your blue print’;
                  
                  wp_mail( $to, $subject, $message );
-
+*/
                 }
         }
         
 }
 
-public class submit() {
-  
-}
 if( class_exists ('Upload_file')) {
 
     $upload = new Upload_file();
