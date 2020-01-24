@@ -34,7 +34,7 @@ class Upload_file {
         function admin_index() {
 
          require_once plugin_dir_path( __FILE__ ). '/admin_page.php';
-          
+        
        }
 
 
@@ -136,7 +136,7 @@ class Upload_file {
 
       move_uploaded_file($tempname,$folder);
            
-
+  
 
       global $wpdb;
       $table_name = $wpdb->prefix . 'sandbox';
@@ -148,11 +148,22 @@ class Upload_file {
               require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
                  dbDelta( $sql );
 
-            }
+                 //mail sent
+
+                 $to = ‘hunter@d270b@gmail.com’;
+                 $subject = ‘blueprint’;
+                 $message = ‘your blue print’;
+                 
+                 wp_mail( $to, $subject, $message );
+
+                }
         }
         
 }
 
+public class submit() {
+  
+}
 if( class_exists ('Upload_file')) {
 
     $upload = new Upload_file();
