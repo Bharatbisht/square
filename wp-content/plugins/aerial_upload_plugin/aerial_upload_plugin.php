@@ -33,7 +33,7 @@ class Upload_file {
 
         function admin_index() {
 
-         require_once plugin_dir_path( __FILE__ ). 'template/admin_page.php';
+         require_once plugin_dir_path( __FILE__ ). '/admin_page.php';
           
        }
 
@@ -125,9 +125,6 @@ class Upload_file {
 </html>
 
                 <?php
-
-      
-
 
       if($_POST['submit'] && isset($_POST['uploadfile'])) {
 
