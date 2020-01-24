@@ -34,7 +34,7 @@ class Upload_file {
         function admin_index() {
 
          require_once plugin_dir_path( __FILE__ ). '/admin_page.php';
-        
+      
        }
 
 
