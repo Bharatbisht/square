@@ -66,3 +66,21 @@ $.ajax({
 }
 */
 
+formdata.addEventListener('submit',(e) => {
+  e.preventDefault();
+
+  let formdata = document.getElementById('formdata');
+
+
+  let url = formdata.dataset.url;
+  
+  let photo = document.getElementById("uploadfile"); 
+
+  fetch(url, {
+    method: "POST",
+    body: photo
+  }).then(res => res.json());
+
+});
+
+ 

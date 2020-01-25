@@ -15,12 +15,25 @@ defined('ABSPATH') or die();
 class Upload_file {
     
 
-    function register() {
+   public function register() {
 
         //connect the style.css
        
-       add_action('admin_menu', array( $this, 'add_admin_pages')); 
+        add_action('admin_menu', array( $this, 'add_admin_pages')); 
+       
+         add_action('wp_ajax_submit_form' , array( $this, 'submit_form'));
 
+          add_action('wp_ajax_nopriv_submit_form' , array( $this, 'submit_form'));
+
+    }
+
+    public function submit_form() {
+       
+      //database connectivity
+
+      echo "your post is accepted";
+
+      wp_die();
     }
 
 
@@ -36,13 +49,6 @@ class Upload_file {
          require_once plugin_dir_path( __FILE__ ). '/admin_page.php';
       
        }
-
-
-    public function activate() {
-           
-        flush_rewrite_rules();
-            
-        }
 
         public function create_table() {
 
@@ -61,29 +67,37 @@ class Upload_file {
 
         }
 
+        public function activate() {
+           
+          flush_rewrite_rules();
+              
+          }
+
+
       public function deactivate() {
            
             flush_rewrite_rules();
             
             }
   
-            function drag() {
+           public function drag() {
               
               wp_enqueue_style('mypluginstyle',plugins_url('/assets/mystyle.css',__FILE__));
              
               wp_enqueue_script('mypluginscript',plugins_url('/assets/app.js',__FILE__));
-              //wp_enqueue_script('mypluginscript', plugin_dir_url(__FILE__) . '/assets/app.js');
+             
                 
              ?>
-            <html>
-<head>
+<html>
+ <head>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
 <section>
-  <form action="" method="POST" enctype="multipart/form-data">
+  <form id="formdata" action="#" method="POST" data-url="<?php echo admin_url('admin-ajax.php') ?>" enctype="multipart/form-data">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -112,51 +126,20 @@ class Upload_file {
           </div>
         </div>
       </div>
-
       <div class="row">
         <div class="col-md-12">
-          <button type="submit" class="btn btn-primary pull-right">Upload</button>
+          <button type="submit" name="submit" class="btn btn-primary pull-right">Upload</button>
         </div>
+       
       </div>
     </div>
+    <input type="hidden" name="action" value="submit_form">
   </form>
 </section>
 </body>
 </html>
 
-                <?php
-
-      if($_POST['submit'] && isset($_POST['uploadfile'])) {
-
-        //the path of image folder
-      $folder = plugin_dir_path( __FILE__ ). 'images/';
-
-      $filename = $_FILES['uploadfile']['name'];
-      $tempname= $_FILES['uploadfile']['tmp_name'];
-
-      move_uploaded_file($tempname,$folder);
-           
-  
-
-      global $wpdb;
-      $table_name = $wpdb->prefix . 'Aerial_upload_images';
-      
-      //query
-      
-      $sql = "INSERT INTO $table_name ('IMAGE_DIR', 'USER_ID','DATE') VALUES ('$filename', 'hunterd270b@gmail.com', Date())";
-
-              require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-                 dbDelta( $sql );
-
-                 //mail sent
-/*
-                 $to = ‘hunter@d270b@gmail.com’;
-                 $subject = ‘blueprint’;
-                 $message = ‘your blue print’;
-                 
-                 wp_mail( $to, $subject, $message );
-*/
-                }
+ <?php
         }
         
 }
@@ -164,9 +147,10 @@ class Upload_file {
 if( class_exists ('Upload_file')) {
 
     $upload = new Upload_file();
+    
        $upload->register();
        
-       add_shortcode( 'drag_drop', array($upload,'drag') );
+         add_shortcode( 'drag_drop', array($upload,'drag') );
 
 }
 
