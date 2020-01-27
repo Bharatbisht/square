@@ -3,40 +3,44 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <br>
 <div class="row">
-   <div class="col-sm-4">
-   <h6>Upload Photo</h6>
+<div class="col-sm-3">
+   <h5><u>ID</u></h5>
    </div>
-   <div class="col-sm-4">
-   <h6>User Name</h6>
+   <div class="col-sm-3">
+   <h5><u>Upload Photo</u></h5>
    </div>
-   <div class="col-sm-4">
-     <h6>Date</h6>
+   <div class="col-sm-3">
+   <h5><u>User Name</u></h5>
+   </div>
+   <div class="col-sm-3">
+     <h5><u>Date</u></h5>
    </div>
 </div>
-
+<br>
 <?php 
  global $wpdb;
- $table_name = $wpdb->prefix . 'sandbox';
  
  //query
  
- $sql = "SELECT * FROM `Aerial_upload_plugin`";
+ $data = $wpdb->get_results("SELECT * FROM `Aerial_upload_images`");
 
-         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-           $data = dbDelta( $sql );
 
            foreach($data as $a) {
-?>
-<div class="row">
-   <div class="col-sm-4">
-   <p><?php echo $a['IMAGE_DIR'];  ?></p>
-   </div>
-   <div class="col-sm-4">
-   <p><?php echo $a['USER_ID']; ?> </p>
-   </div>
-   <div class="col-sm-4">
-     <p> <?php echo $a['DATE']; ?></p>
-   </div>
-</div>
+   ?>
+      <div class = "row">
+         <div class="col-sm-3">
+        <?php echo($a->ID);?>            
+          </div>
+          <div class="col-sm-3">
+          <?php echo($a->USER_ID); ?>       
+          </div>
+          <div class="col-sm-3">
+          
+          <img src="<?php echo $a->IMAGE_DIR; ?>" height= '100' width ='100'>
 
-           <?php } ?>
+          </div>
+          <div class="col-sm-3">
+          <?php echo($a->DATE); ?>
+          </div>
+      </div>    
+       <?php } ?>

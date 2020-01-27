@@ -6,7 +6,7 @@ function readFile(input) {
 
     reader.onload = function(e) {
       var htmlPreview =
-        '<img width="200" id="uploadfile" src="' + e.target.result + '"/>' +
+        '<img width="200" src="' + e.target.result + '"/>' +
         '<p>' + input.files[0].name + '</p>';
       var wrapperZone = $(input).parent();
       var previewZone = $(input).parent().parent().find('.preview-zone');
@@ -66,7 +66,9 @@ $.ajax({
 }
 */
 
+
 formdata.addEventListener('submit',(e) => {
+  
   e.preventDefault();
 
   let formdata = document.getElementById('formdata');
@@ -74,12 +76,18 @@ formdata.addEventListener('submit',(e) => {
 
   let url = formdata.dataset.url;
   
-  let photo = document.getElementById("uploadfile"); 
+  let params = new FormData(formdata);
+
 
   fetch(url, {
     method: "POST",
-    body: photo
-  }).then(res => res.json());
+    body: params
+  }).then(function(data){
+      console.log(data.text());
+     location.reload();
+  }).catch(function(error){
+    console.log(error);
+  })
 
 });
 

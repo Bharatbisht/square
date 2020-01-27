@@ -31,9 +31,36 @@ class Upload_file {
        
       //database connectivity
 
-      echo "your post is accepted";
+      $photo_name = $_FILES['img_logo']['name'];
+    
+     $photo_temp_name = $_FILES['img_logo']['tmp_name'];
+   
+     $folder = plugin_dir_path( __FILE__ ).'images/'.$photo_name;
+    // $temp_name = plugin_dir_path( __FILE__ ).$photo_temp_name;
 
-      wp_die();
+   move_uploaded_file($photo_temp_name,$folder);
+    
+   $date = getdate();
+    $to = $_POST['email'];
+
+     $newdate = $date['mday'].'-'.$date['mon'].'-'.$date['year'];
+    global $wpdb;
+   
+  $sql=$wpdb->insert("Aerial_upload_images", array("IMAGE_DIR"=>$folder, "USER_ID"=>$to, "DATE"=>$newdate));
+  
+  if($sql) {
+    echo "data is inserted";
+    
+    $subject = "Roof BluePrint";
+    $message = $folder;
+      
+    wp_mail($to,$subject,$message);
+
+    }else {
+    echo "not inserted";
+  }
+     wp_die();
+      
     }
 
 
@@ -53,12 +80,11 @@ class Upload_file {
         public function create_table() {
 
               global $wpdb;
-            $table_name = $wpdb->prefix . 'sandbox';
               $sql = "CREATE TABLE Aerial_upload_images (
-                      ID int,
-                      IMAGE_DIR varchar(255),
+                      ID int NOT NULL AUTO_INCREMENT,
+                      IMAGE_DIR blob(255),
                       USER_ID varchar(255),
-                      DATE date,
+                      DATE varchar(225),
                       PRIMARY KEY (ID)
                     )";
 
@@ -85,7 +111,6 @@ class Upload_file {
               wp_enqueue_style('mypluginstyle',plugins_url('/assets/mystyle.css',__FILE__));
              
               wp_enqueue_script('mypluginscript',plugins_url('/assets/app.js',__FILE__));
-             
                 
              ?>
 <html>
@@ -126,13 +151,22 @@ class Upload_file {
           </div>
         </div>
       </div>
+
+<!--
       <div class="row">
         <div class="col-md-12">
           <button type="submit" name="submit" class="btn btn-primary pull-right">Upload</button>
         </div>
-       
       </div>
+-->
+      <div class="input-group mb-3">
+  <input type="email" class="form-control" name="email" id="email" placeholder="Enter Your Email" required>
+  <div class="input-group-append">
+    <button class="btn btn-outline-primary" name="submit" type="submit">Button</button>
+  </div>
+</div>
     </div>
+  
     <input type="hidden" name="action" value="submit_form">
   </form>
 </section>
